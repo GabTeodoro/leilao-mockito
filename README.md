@@ -1,3 +1,4 @@
+![MOCKITO](https://miro.medium.com/max/800/1*7w64vyBXihVBrjNBBOIF9g.png)
 <h1 align="center">Conhecendo o Mockito!</h1>
 
 ## Índice
