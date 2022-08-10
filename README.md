@@ -19,7 +19,7 @@
 
 ## Funcionalidades
 - [x] Adicionar Mockito ao projeto.
-- [x] Criar o helloWorld com o Mockito.
+- [x] Criar o helloworld com o Mockito.
 - [x] Implementar testes da classe FinalizarLeilaoService.
 - [x] Implementar testes com uso de Exceptions.
 - [x] Implementar testes da classe GeradorDePagamentos.
