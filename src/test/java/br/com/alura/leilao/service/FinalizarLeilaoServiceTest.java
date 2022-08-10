@@ -22,10 +22,13 @@ class FinalizarLeilaoServiceTest {
 	@Mock
 	private LeilaoDao leilaoDao;
 	
+	@Mock
+	private EnviadorDeEmails emails;
+	
 	public FinalizarLeilaoServiceTest() {
 		
 		MockitoAnnotations.initMocks(this);
-		this.service = new FinalizarLeilaoService(leilaoDao);
+		this.service = new FinalizarLeilaoService(leilaoDao, emails);
 	}
 
 	@Test
@@ -41,6 +44,35 @@ class FinalizarLeilaoServiceTest {
 		Assert.assertEquals(new BigDecimal("900"), leilao.getLanceVencedor().getValor());
 		
 		Mockito.verify(leilaoDao).salvar(leilao);
+	}
+	
+	@Test
+	void deveriaEnviarEmailParaVencendorLeilao() {
+		
+		List<Leilao> leiloes = leiloes();
+		Mockito.when(leilaoDao.buscarLeiloesExpirados()).thenReturn(leiloes);
+		
+		service.finalizarLeiloesExpirados();
+		
+		Leilao leilao = leiloes.get(0);
+		Lance lanceVencedor = leilao.getLanceVencedor();
+		
+		Mockito.verify(emails).enviarEmailVencedorLeilao(lanceVencedor);
+	}
+	
+	@Test
+	void naoDveriaEnviarEmailParaVencendorLeilaoCasoErroAoSalvar() {
+		
+		List<Leilao> leiloes = leiloes();
+		Mockito.when(leilaoDao.buscarLeiloesExpirados()).thenReturn(leiloes);
+		Mockito.when(leilaoDao.salvar(Mockito.any())).thenThrow(RuntimeException.class);
+		
+		try {
+			service.finalizarLeiloesExpirados();
+			Mockito.verifyNoInteractions(emails);
+		} catch (Exception e) {
+			
+		}
 	}
 	
 	// Trecho de código omitido
